@@ -80,15 +80,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     // MARK: - ARSCNViewDelegate
 
-    // ARSCNViewのデリゲートメソッド renderer
-    // タイマーが実行中の場合にのみ時間を更新する
+    // ARSCNViewのデリゲートメソッド renderer -
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        if isTimerRunning {
+        if isTimerRunning { // タイマーが実行中の場合にのみ時間を更新する
             if let startTime = startTime {
                 let elapsedTime: Double
-                //if timerInterruptedValue != 0 {
                 if timerBaseValue != 0 {
-                    //elapsedTime = Date().timeIntervalSince(startTime) - timerInterruptedValue
                     elapsedTime = Date().timeIntervalSince(startTime) + timerBaseValue
                     print(Date().timeIntervalSince(startTime), elapsedTime)
                 } else {
@@ -100,30 +97,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                     self.updateTextNode(text: StringTime)
                 }
             }
-//        } else {
-//            if let startTime = startTime {
-//                let elapsedTime = Date().timeIntervalSince(startTime) - timerInterruptedValue
-//                print(Date().timeIntervalSince(startTime), timerInterruptedValue, elapsedTime)
-//            }
         }
     }
-// 0 -> 10 - 20 -> 30
+
     // MARK: - Timer Methods
 
-    // Start / Stop ボタンが押されたときの処理
-    // タイマーが再開されたときに、経過時間を保持したまま再開するように修正
+    // Start / Stop ボタン押下時の処理
     @objc func startStopButtonTapped() {
         if isTimerRunning { // Stop 処理
             stopTimer()
             startStopButton.setTitle("Start", for: .normal)
         } else { // Start 処理
-            //print("timerValue: \(timerValue)")
-//            if let interruptTime = interruptTime {
-//                let currentTime = Date().timeIntervalSince(interruptTime) + timerValue
-//                updateTextNode(text: formatTime(seconds: currentTime))
-//            } else {
-//                updateTextNode(text: formatTime(seconds: timerValue))
-//            }
             startTimer()
             startStopButton.setTitle("Stop", for: .normal)
         }
@@ -145,106 +129,35 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         if !isTimerRunning {
             if let startTime = startTime { // startTime が nil でない場合の処理(stop ボタン押下後)
                 if let interruptTime = interruptTime { // interruptTime が nil でない場合の処理(stop ボタン押下後)
-                    //timerInterruptedValue = Date().timeIntervalSince(startTime!) - Date().timeIntervalSince(interruptTime)
-                    //timerInterruptedValue = Date().timeIntervalSince(interruptTime)
                 } else { // interruptTime が nil の場合の処理(現時点では非想定)
                 }
-                //timerBaseValue -= timerInterruptedValue
-                //let currentTime = Date().timeIntervalSince(startTime)
-                //timerValue += currentTime // 経過時間を加算
-                //print("timerValue: \(timerValue)")
-                //print("currentTime: \(currentTime)")
-                //print("interruptTime: \(interruptTime)")
             } else { // startTime が nil の場合の処理 (初期状態時 / reset ボタン押下後)
-                //startTime = Date()
-                //print("startTime: \(startTime) - type: \(type(of: startTime))")
             }
-
+            // 共通処理
             interruptTime = nil
             startTime = Date()
             isTimerRunning = true
             print("startTime: \(startTime)")
-            print("isTimerRunning: \(isTimerRunning)")
         }
     }
-    
-    
-//    // タイマーを開始するメソッド
-//    func startTimer() {
-//        if !isTimerRunning {
-//            if let startTime = startTime { // startTime が nil ではない場合(直前にresetボタンが押されていない)
-//                let currentTime = Date().timeIntervalSince(startTime)
-////                //timerValue = timerValue + currentTime - Date().timeIntervalSince(interruptTime!) // 経過時間を加算
-////                print("timerValue: \(timerValue)")
-////                print("currentTime: \(currentTime)")
-////                print("interruptTime: \(interruptTime)")
-////                //startTime = Date()
-////                //startTime = Date()
-////                print("startTime: \(startTime) - type: \(type(of: startTime))")
-//            } else { // startTime が nil の場合(直前にresetボタンが押されている)
-//                print("startTime: \(startTime) - type: \(type(of: startTime))")
-//                startTime = Date()
-//                
-////                let currentTime = Date().timeIntervalSince(startTime!)
-////                //timerValue = timerValue + currentTime - Date().timeIntervalSince(interruptTime!) // 経過時間を加算
-////                print("timerValue: \(timerValue)")
-////                print("currentTime: \(currentTime)")
-////                print("interruptTime: \(interruptTime)")
-////                //
-//            }
-//            isTimerRunning = true
-//            print("startTime: \(startTime)")
-//            print("isTimerRunning: \(isTimerRunning)")
-//        }
-//    }
-
-//    func startTimer() {
-//        if !isTimerRunning {
-//            if startTime == nil {
-//                startTime = Date()
-//            } else {
-//                let currentTime = Date().timeIntervalSince(startTime!)
-//                elapsedTime += currentTime // 経過時間を加算
-//                print("elapsedTime: \(elapsedTime)")
-//                print("currentTime: \(currentTime)")
-//                startTime = Date()
-//            }
-//            isTimerRunning = true
-//            print("startTime: \(startTime)")
-//            print("isTimerRunning: \(isTimerRunning)")
-//        }
-//    }
     
     // タイマーを停止するメソッド
     func stopTimer() {
         if isTimerRunning {
             interruptTime = Date()
-            //timerInterruptedValue =
-            //let currentTime = Date().timeIntervalSince(startTime!)
-            //timerValue = Date().timeIntervalSince(startTime!)
             isTimerRunning = false
-            // Call a method to update the text node with the current timer value
             readTextNode()
             updateTextNode(text: formatTime(seconds: timerBaseValue))
-            //readTextNode()
-
         }
     }
 
     // タイマーをリセットするメソッド
     func resetTimer() {
-        //interruptTime = Date()
         updateTextNode(text: formatTime(seconds: 0))
         startTime = nil
         interruptTime = nil
-        //timerInterruptedValue = 0
         timerBaseValue = 0
-        //timerValue = 0
-        //timerValue = 0
-        //let currentTime = 0
         isTimerRunning = false
-        //updateTextNode(text: formattedTime(seconds: Int(elapsedTime)))
-        print("interruptTime: \(interruptTime)")
     }
     
     // MARK: - UI Updates
@@ -263,30 +176,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             }
         }
     }
-
-//    func updateTextNode2(text: String) {
-//        // テキストノードがまだ作成されていない場合は作成する
-//        if timerNode == nil {
-//            timerNode = createTextNode(text: text)
-//            sceneView.scene.rootNode.addChildNode(timerNode!)
-//        } else {
-//            // テキストノードが既に存在する場合は、テキストを更新する
-//            if let textGeometry = timerNode?.geometry as? SCNText {
-//                textGeometry.string = text
-//            }
-//        }
-//    }
     
+    // テキストノードに表示された経過時間を読み取るメソッド
     func readTextNode(){
+        // テキストノードが既に存在する場合は経過時間を読み取る
         if timerNode != nil {
             if let textGeometry = timerNode?.geometry as? SCNText {
                 let timerString: String = textGeometry.string as! String
                 print("timerString: \(timerString)")
+                // 経過時間を型変換して、timerBaseValue に代入する
                 if let convertedTime = convertTime(timeString: timerString) {
                     timerBaseValue = convertedTime
                 }
-                print(type(of: timerString))
-                print("readTextNode: timerBaseValue: \(timerBaseValue)")
             }
         }
     }
@@ -300,15 +201,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         textNode.position = SCNVector3(-0.2, -0.2, -0.5) // 適切な位置を設定してください
         return textNode
     }
-
-//    func createTextNode2(text: String) -> SCNNode {
-//        let textGeometry = SCNText(string: text, extrusionDepth: 1.5)
-//        textGeometry.firstMaterial?.diffuse.contents = UIColor.white
-//        let textNode = SCNNode(geometry: textGeometry)
-//        textNode.scale = SCNVector3(0.005, 0.005, 0.005) // 適切なスケールを設定してください
-//        textNode.position = SCNVector3(-0.2, -0.5, -0.5) // 適切な位置を設定してください
-//        return textNode
-//    }
     
     // 経過時間をフォーマットするメソッド
     private func formatTime(seconds: TimeInterval) -> String {
@@ -318,8 +210,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         return String(format: "%02d:%02d.%02d", minutes, remainingSeconds, milliseconds)
     }
     
+    // 経過時間を TimeInterval 型に型変換するメソッド
     private func convertTime(timeString: String) -> TimeInterval? {
         let timeComponents = timeString.components(separatedBy: ":")
+        // timeString の形式が想定通り、"xx:yy" の場合にのみ処理を実行する
         if timeComponents.count == 2,
            let minutes = Double(timeComponents[0]),
            let secondsAndMillis = Double(timeComponents[1]) {
