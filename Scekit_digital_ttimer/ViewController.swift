@@ -10,14 +10,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var timerNode: SCNNode?
     // タイマー開始時刻
     var startTime: Date?
-    // タイマー中断時刻
-    var interruptTime: Date?
     // タイマーが実行中かどうかを示すフラグ
     var isTimerRunning = false
+    // タイマーの状態変化が発生したかどうかを示すフラグ
+    var isStatusChanged = false
     // タイマーの値を保持するためのプロパティ
     var timerBaseValue: TimeInterval = 0
-    // Stop - Start 間のタイマーの値を保持するためのプロパティ
-    //var timerInterruptedValue: TimeInterval = 0
 
     // ボタンの追加とレイアウト制約の設定
     let startStopButton: UIButton = {
@@ -42,6 +40,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         return button
     }()
 
+    // Adjustボタンの追加とレイアウト制約の設定
+    let adjustButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Adjust", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .green
+        button.layer.cornerRadius = 8
+        button.addTarget(self, action: #selector(adjustButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
     // UIViewControllerのライフサイクルメソッド viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,12 +61,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // 新しいシーンを作成
         let scene = SCNScene()
         sceneView.scene = scene
-        // ボタンをビューに追加
+        // Start/Stopボタンをビューに追加
         view.addSubview(startStopButton)
         setupConstraints()
-        // リセットボタンをビューに追加
+        // Resetボタンをビューに追加
         view.addSubview(resetButton)
         setupResetButtonConstraints()
+        
+        // Adjustボタンをビューに追加
+        view.addSubview(adjustButton)
+        setupAdjustButtonConstraints()
     }
 
     // UIViewControllerのライフサイクルメソッド viewWillAppear
@@ -82,6 +95,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     // ARSCNViewのデリゲートメソッド renderer -
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        //print("rendering")
         if isTimerRunning { // タイマーが実行中の場合にのみ時間を更新する
             if let startTime = startTime {
                 let elapsedTime: Double
@@ -95,6 +109,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 let StringTime = formatTime(seconds: elapsedTime)
                 DispatchQueue.main.async {
                     self.updateTextNode(text: StringTime)
+                }
+            }
+        } else {
+            if isStatusChanged { // stop ボタン、または reset ボタン押下時の処理
+                isStatusChanged = false
+                if let startTime = startTime {
+                    readTextNode()
+                    updateTextNode(text: formatTime(seconds: timerBaseValue))
+                } else {
+                    DispatchQueue.main.async {
+                        self.updateTextNode(text: "00:00.00")
+                    }
                 }
             }
         }
@@ -115,10 +141,24 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     @objc func resetButtonTapped() {
         resetTimer() // タイマーを停止
-        updateTextNode(text: "00:00.00") // テキストノードをリセット
+        //updateTextNode(text: "00:00.00") // テキストノードをリセット
         startStopButton.setTitle("Start", for: .normal) // Start/Stopボタンのテキストをリセット
     }
 
+    // Adjustボタン押下時の処理
+    @objc func adjustButtonTapped() {
+        if let camera = sceneView.pointOfView {
+            let position = SCNVector3(x: 0.2, y: 0, z: -0.5) // カメラから見たときの端末の画面の中央の位置
+            let convertedPosition = camera.convertPosition(position, to: nil)
+            timerNode?.position = convertedPosition
+            
+            let targetNode = SCNNode()
+            targetNode.position = SCNVector3(x: 0.2, y: 0.3, z: 0) // カメラから見たときの端末の画面の中央の位置
+            let lookAtConstraint = SCNLookAtConstraint(target: targetNode)
+            lookAtConstraint.isGimbalLockEnabled = true
+            timerNode?.constraints = [lookAtConstraint]
+        }
+    }
     // タイマーを描画するメソッド
     func placeTimer() {
         updateTextNode(text: "00:00.00")
@@ -127,37 +167,25 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // タイマーを開始するメソッド
     func startTimer() {
         if !isTimerRunning {
-            if let startTime = startTime { // startTime が nil でない場合の処理(stop ボタン押下後)
-                if let interruptTime = interruptTime { // interruptTime が nil でない場合の処理(stop ボタン押下後)
-                } else { // interruptTime が nil の場合の処理(現時点では非想定)
-                }
-            } else { // startTime が nil の場合の処理 (初期状態時 / reset ボタン押下後)
-            }
-            // 共通処理
-            interruptTime = nil
             startTime = Date()
             isTimerRunning = true
-            print("startTime: \(startTime)")
         }
     }
     
     // タイマーを停止するメソッド
     func stopTimer() {
         if isTimerRunning {
-            interruptTime = Date()
             isTimerRunning = false
-            readTextNode()
-            updateTextNode(text: formatTime(seconds: timerBaseValue))
+            isStatusChanged = true
         }
     }
 
     // タイマーをリセットするメソッド
     func resetTimer() {
-        updateTextNode(text: formatTime(seconds: 0))
         startTime = nil
-        interruptTime = nil
         timerBaseValue = 0
         isTimerRunning = false
+        isStatusChanged = true
     }
     
     // MARK: - UI Updates
@@ -228,7 +256,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func setupResetButtonConstraints() {
         resetButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            resetButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -60), // 画面の中央線から-60の位置に配置
+            resetButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -180), // 画面の中央線から-180の位置に配置
             resetButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50), // 下から-16の位置に配置
             resetButton.widthAnchor.constraint(equalToConstant: 100),
             resetButton.heightAnchor.constraint(equalToConstant: 40)
@@ -239,10 +267,21 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func setupConstraints() {
         startStopButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            startStopButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 60), // 画面の中央線から+60の位置に配置
+            startStopButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0), // 画面の中央に配置
             startStopButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50), // 下から-16の位置に配置
             startStopButton.widthAnchor.constraint(equalToConstant: 100),
             startStopButton.heightAnchor.constraint(equalToConstant: 40)
+        ])
+    }
+    
+    // Adjustボタンのレイアウト制約の設定
+    func setupAdjustButtonConstraints() {
+        adjustButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            adjustButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 180), // 画面の中央線から+180の位置に配置
+            adjustButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50), // 下から-16の位置に配置
+            adjustButton.widthAnchor.constraint(equalToConstant: 100),
+            adjustButton.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
 }
