@@ -41,15 +41,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }()
 
     // Adjustボタンの追加とレイアウト制約の設定
-    let adjustButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Adjust", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .green
-        button.layer.cornerRadius = 8
-        button.addTarget(self, action: #selector(adjustButtonTapped), for: .touchUpInside)
-        return button
-    }()
+//    let adjustButton: UIButton = {
+//        let button = UIButton()
+//        button.setTitle("Adjust", for: .normal)
+//        button.setTitleColor(.white, for: .normal)
+//        button.backgroundColor = .green
+//        button.layer.cornerRadius = 8
+//        button.addTarget(self, action: #selector(adjustButtonTapped), for: .touchUpInside)
+//        return button
+//    }()
     
     // UIViewControllerのライフサイクルメソッド viewDidLoad
     override func viewDidLoad() {
@@ -69,8 +69,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         setupResetButtonConstraints()
         
         // Adjustボタンをビューに追加
-        view.addSubview(adjustButton)
-        setupAdjustButtonConstraints()
+//        view.addSubview(adjustButton)
+//        setupAdjustButtonConstraints()
     }
 
     // UIViewControllerのライフサイクルメソッド viewWillAppear
@@ -146,19 +146,19 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
 
     // Adjustボタン押下時の処理
-    @objc func adjustButtonTapped() {
-        if let camera = sceneView.pointOfView {
-            let position = SCNVector3(x: 0.2, y: 0, z: -0.5) // カメラから見たときの端末の画面の中央の位置
-            let convertedPosition = camera.convertPosition(position, to: nil)
-            timerNode?.position = convertedPosition
-            
-            let targetNode = SCNNode()
-            targetNode.position = SCNVector3(x: 0.2, y: 0.3, z: 0) // カメラから見たときの端末の画面の中央の位置
-            let lookAtConstraint = SCNLookAtConstraint(target: targetNode)
-            lookAtConstraint.isGimbalLockEnabled = true
-            timerNode?.constraints = [lookAtConstraint]
-        }
-    }
+//    @objc func adjustButtonTapped() {
+//        if let camera = sceneView.pointOfView {
+//            let position = SCNVector3(x: 0.2, y: 0, z: -0.5) // カメラから見たときの端末の画面の中央の位置
+//            let convertedPosition = camera.convertPosition(position, to: nil)
+//            timerNode?.position = convertedPosition
+//            
+//            let targetNode = SCNNode()
+//            targetNode.position = SCNVector3(x: 0.2, y: 0.3, z: 0) // カメラから見たときの端末の画面の中央の位置
+//            let lookAtConstraint = SCNLookAtConstraint(target: targetNode)
+//            lookAtConstraint.isGimbalLockEnabled = true
+//            timerNode?.constraints = [lookAtConstraint]
+//        }
+//    }
     // タイマーを描画するメソッド
     func placeTimer() {
         updateTextNode(text: "00:00.00")
@@ -275,13 +275,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     // Adjustボタンのレイアウト制約の設定
-    func setupAdjustButtonConstraints() {
-        adjustButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            adjustButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 180), // 画面の中央線から+180の位置に配置
-            adjustButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50), // 下から-16の位置に配置
-            adjustButton.widthAnchor.constraint(equalToConstant: 100),
-            adjustButton.heightAnchor.constraint(equalToConstant: 40)
-        ])
-    }
+//    func setupAdjustButtonConstraints() {
+//        adjustButton.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            adjustButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 180), // 画面の中央線から+180の位置に配置
+//            adjustButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50), // 下から-16の位置に配置
+//            adjustButton.widthAnchor.constraint(equalToConstant: 100),
+//            adjustButton.heightAnchor.constraint(equalToConstant: 40)
+//        ])
+//    }
 }
