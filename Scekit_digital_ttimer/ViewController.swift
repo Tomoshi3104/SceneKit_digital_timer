@@ -3,7 +3,7 @@ import SceneKit
 import ARKit
 
 // UIViewControllerを継承したクラス ViewController
-class ViewController: UIViewController, ARSCNViewDelegate {
+class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // ARSCNViewのIBOutlet
     @IBOutlet var sceneView: ARSCNView!
     // AR上のタイマーのノード
@@ -16,7 +16,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var isStatusChanged = false
     // タイマーの値を保持するためのプロパティ
     var timerBaseValue: TimeInterval = 0
-
+    
     // ボタンの追加とレイアウト制約の設定
     let startStopButton: UIButton = {
         let button = UIButton()
@@ -28,7 +28,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         button.addTarget(self, action: #selector(startStopButtonTapped), for: .touchUpInside)
         return button
     }()
-
+    
     // リセットボタンの追加とレイアウト制約の設定
     let resetButton: UIButton = {
         let button = UIButton()
@@ -39,7 +39,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         button.addTarget(self, action: #selector(resetButtonTapped), for: .touchUpInside)
         return button
     }()
-
+    
     // Adjustボタンの追加とレイアウト制約の設定
     let adjustButton: UIButton = {
         let button = UIButton()
@@ -54,7 +54,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // UIViewControllerのライフサイクルメソッド viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        // ARSCNViewのデリゲートを設定
+        // ARSessionのデリゲートをViewController自体に設定
+        self.sceneView.session.delegate = self
+        // ARSCNViewのデリゲートをViewController自体に設定
         sceneView.delegate = self
         // fpsやタイミング情報を表示
         sceneView.showsStatistics = true
@@ -67,12 +69,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Resetボタンをビューに追加
         view.addSubview(resetButton)
         setupResetButtonConstraints()
-        
         // Adjustボタンをビューに追加
         view.addSubview(adjustButton)
         setupAdjustButtonConstraints()
     }
-
+    
     // UIViewControllerのライフサイクルメソッド viewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -83,16 +84,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // タイマーを配置
         placeTimer()
     }
-
+    
     // UIViewControllerのライフサイクルメソッド viewWillDisappear
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // ARSCNViewのセッションを一時停止
         sceneView.session.pause()
     }
-
+    
     // MARK: - ARSCNViewDelegate
-
+    
     // ARSCNViewのデリゲートメソッド renderer -
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         //print("rendering")
@@ -125,9 +126,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             }
         }
     }
-
+    
+    // MARK: - ARSessionDelegate
+    
+    //        func session(_ session: ARSession, didUpdate frame: ARFrame) {
+    //            // 端末の座標を取得
+    //            let currentPosition = frame.camera.transform.columns.3
+    //            print("Current position: \(currentPosition)")
+    //        }
+    
     // MARK: - Timer Methods
-
+    
     // Start / Stop ボタン押下時の処理
     @objc func startStopButtonTapped() {
         if isTimerRunning { // Stop 処理
@@ -138,27 +147,27 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             startStopButton.setTitle("Stop", for: .normal)
         }
     }
-
+    
     @objc func resetButtonTapped() {
         resetTimer() // タイマーを停止
         //updateTextNode(text: "00:00.00") // テキストノードをリセット
         startStopButton.setTitle("Start", for: .normal) // Start/Stopボタンのテキストをリセット
     }
-
-    // Adjustボタン押下時の処理
+    
     @objc func adjustButtonTapped() {
+        print(sceneView.pointOfView!)
         if let camera = sceneView.pointOfView {
-            let position = SCNVector3(x: 0.2, y: 0, z: -0.5) // カメラから見たときの端末の画面の中央の位置
+            let position = SCNVector3(x: -0.2, y: -0.1, z: -0.5) // Set the position relative to the camera
             let convertedPosition = camera.convertPosition(position, to: nil)
             timerNode?.position = convertedPosition
-            
-            let targetNode = SCNNode()
-            targetNode.position = SCNVector3(x: 0.2, y: 0.3, z: 0) // カメラから見たときの端末の画面の中央の位置
-            let lookAtConstraint = SCNLookAtConstraint(target: targetNode)
-            lookAtConstraint.isGimbalLockEnabled = true
-            timerNode?.constraints = [lookAtConstraint]
+            timerNode?.eulerAngles = camera.eulerAngles // Set the node's orientation to match the camera's orientation
+
+            //let lookAtConstraint = SCNLookAtConstraint(target: camera)
+            //lookAtConstraint.isGimbalLockEnabled = true
+            //timerNode?.constraints = [lookAtConstraint]
         }
     }
+    
     // タイマーを描画するメソッド
     func placeTimer() {
         updateTextNode(text: "00:00.00")
@@ -179,7 +188,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             isStatusChanged = true
         }
     }
-
+    
     // タイマーをリセットするメソッド
     func resetTimer() {
         startTime = nil
@@ -189,7 +198,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     // MARK: - UI Updates
-
+    
     // テキストノードを更新するメソッド
     func updateTextNode(text: String) {
         // テキストノードがまだ作成されていない場合は作成する
@@ -219,7 +228,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             }
         }
     }
-            
+    
     // テキストノードを作成するメソッド
     func createTextNode(text: String) -> SCNNode {
         let textGeometry = SCNText(string: text, extrusionDepth: 1.5)
@@ -250,7 +259,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
         return nil
     }
-
+    
     // レイアウト制約の設定
     // Resetボタンのレイアウト制約の設定
     func setupResetButtonConstraints() {
@@ -262,7 +271,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             resetButton.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
-
+    
     // Startボタンのレイアウト制約の設定
     func setupConstraints() {
         startStopButton.translatesAutoresizingMaskIntoConstraints = false

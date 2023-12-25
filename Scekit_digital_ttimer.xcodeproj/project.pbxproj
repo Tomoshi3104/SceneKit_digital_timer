@@ -21,6 +21,7 @@
 		749AB8AF2B30774200CAB5D6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		749AB8B22B30774200CAB5D6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		749AB8B42B30774300CAB5D6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		74D65CF62B383B3A00DE2507 /* idea.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = idea.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +54,7 @@
 		749AB8AA2B30774200CAB5D6 /* Scekit_digital_ttimer */ = {
 			isa = PBXGroup;
 			children = (
+				74D65CF62B383B3A00DE2507 /* idea.md */,
 				749AB8AB2B30774200CAB5D6 /* AppDelegate.swift */,
 				749AB8AD2B30774200CAB5D6 /* art.scnassets */,
 				749AB8AF2B30774200CAB5D6 /* ViewController.swift */,
