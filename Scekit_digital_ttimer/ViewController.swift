@@ -126,15 +126,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
     }
-    
-    // MARK: - ARSessionDelegate
-    
-    //        func session(_ session: ARSession, didUpdate frame: ARFrame) {
-    //            // 端末の座標を取得
-    //            let currentPosition = frame.camera.transform.columns.3
-    //            print("Current position: \(currentPosition)")
-    //        }
-    
+        
     // MARK: - Timer Methods
     
     // Start / Stop ボタン押下時の処理
@@ -148,24 +140,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
+    // Reset ボタン押下時の処理
     @objc func resetButtonTapped() {
         resetTimer() // タイマーを停止
         //updateTextNode(text: "00:00.00") // テキストノードをリセット
         startStopButton.setTitle("Start", for: .normal) // Start/Stopボタンのテキストをリセット
     }
     
+    // Adjust ボタン押下時の処理
     @objc func adjustButtonTapped() {
-        print(sceneView.pointOfView!)
-        if let camera = sceneView.pointOfView {
-            let position = SCNVector3(x: -0.2, y: -0.1, z: -0.5) // Set the position relative to the camera
-            let convertedPosition = camera.convertPosition(position, to: nil)
-            timerNode?.position = convertedPosition
-            timerNode?.eulerAngles = camera.eulerAngles // Set the node's orientation to match the camera's orientation
-
-            //let lookAtConstraint = SCNLookAtConstraint(target: camera)
-            //lookAtConstraint.isGimbalLockEnabled = true
-            //timerNode?.constraints = [lookAtConstraint]
-        }
+        adjustTimer()
     }
     
     // タイマーを描画するメソッド
@@ -195,6 +179,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         timerBaseValue = 0
         isTimerRunning = false
         isStatusChanged = true
+    }
+    
+    // MARK: - ARSessionDelegate
+    
+    // タイマーを画面中央に再配置するメソッド
+    func adjustTimer() {
+        //print(sceneView.pointOfView!)
+        if let camera = sceneView.pointOfView {
+            let position = SCNVector3(x: -0.2, y: -0.1, z: -0.5) // Set the position relative to the camera
+            let convertedPosition = camera.convertPosition(position, to: nil)
+            timerNode?.position = convertedPosition
+            timerNode?.eulerAngles = camera.eulerAngles // Set the node's orientation to match the camera's orientation
+        }
     }
     
     // MARK: - UI Updates
