@@ -15,7 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		749AB8A82B30774200CAB5D6 /* Scekit_digital_ttimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Scekit_digital_ttimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		749AB8A82B30774200CAB5D6 /* SceneKit_Digital_Timer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SceneKit_Digital_Timer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		749AB8AB2B30774200CAB5D6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		749AB8AD2B30774200CAB5D6 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		749AB8AF2B30774200CAB5D6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -38,7 +38,7 @@
 		749AB89F2B30774200CAB5D6 = {
 			isa = PBXGroup;
 			children = (
-				749AB8AA2B30774200CAB5D6 /* Scekit_digital_ttimer */,
+				749AB8AA2B30774200CAB5D6 /* SceneKit_Digital_Timer */,
 				749AB8A92B30774200CAB5D6 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -46,12 +46,12 @@
 		749AB8A92B30774200CAB5D6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				749AB8A82B30774200CAB5D6 /* Scekit_digital_ttimer.app */,
+				749AB8A82B30774200CAB5D6 /* SceneKit_Digital_Timer.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		749AB8AA2B30774200CAB5D6 /* Scekit_digital_ttimer */ = {
+		749AB8AA2B30774200CAB5D6 /* SceneKit_Digital_Timer */ = {
 			isa = PBXGroup;
 			children = (
 				74D65CF62B383B3A00DE2507 /* idea.md */,
@@ -61,15 +61,15 @@
 				749AB8B12B30774200CAB5D6 /* Main.storyboard */,
 				749AB8B42B30774300CAB5D6 /* Assets.xcassets */,
 			);
-			path = Scekit_digital_ttimer;
+			path = SceneKit_Digital_Timer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		749AB8A72B30774200CAB5D6 /* Scekit_digital_ttimer */ = {
+		749AB8A72B30774200CAB5D6 /* SceneKit_Digital_Timer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 749AB8B82B30774300CAB5D6 /* Build configuration list for PBXNativeTarget "Scekit_digital_ttimer" */;
+			buildConfigurationList = 749AB8B82B30774300CAB5D6 /* Build configuration list for PBXNativeTarget "SceneKit_Digital_Timer" */;
 			buildPhases = (
 				749AB8A42B30774200CAB5D6 /* Sources */,
 				749AB8A52B30774200CAB5D6 /* Frameworks */,
@@ -79,9 +79,9 @@
 			);
 			dependencies = (
 			);
-			name = Scekit_digital_ttimer;
+			name = SceneKit_Digital_Timer;
 			productName = Scekit_digital_ttimer;
-			productReference = 749AB8A82B30774200CAB5D6 /* Scekit_digital_ttimer.app */;
+			productReference = 749AB8A82B30774200CAB5D6 /* SceneKit_Digital_Timer.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -99,7 +99,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 749AB8A32B30774200CAB5D6 /* Build configuration list for PBXProject "Scekit_digital_ttimer" */;
+			buildConfigurationList = 749AB8A32B30774200CAB5D6 /* Build configuration list for PBXProject "SceneKit_Digital_Timer" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -112,7 +112,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				749AB8A72B30774200CAB5D6 /* Scekit_digital_ttimer */,
+				749AB8A72B30774200CAB5D6 /* SceneKit_Digital_Timer */,
 			);
 		};
 /* End PBXProject section */
@@ -289,12 +289,13 @@
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vrapp.Scekit-digital-ttimer";
+				PRODUCT_BUNDLE_IDENTIFIER = com.vrapp.SceneKitDigitalTimer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -318,12 +319,13 @@
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vrapp.Scekit-digital-ttimer";
+				PRODUCT_BUNDLE_IDENTIFIER = com.vrapp.SceneKitDigitalTimer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -334,7 +336,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		749AB8A32B30774200CAB5D6 /* Build configuration list for PBXProject "Scekit_digital_ttimer" */ = {
+		749AB8A32B30774200CAB5D6 /* Build configuration list for PBXProject "SceneKit_Digital_Timer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				749AB8B62B30774300CAB5D6 /* Debug */,
@@ -343,7 +345,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		749AB8B82B30774300CAB5D6 /* Build configuration list for PBXNativeTarget "Scekit_digital_ttimer" */ = {
+		749AB8B82B30774300CAB5D6 /* Build configuration list for PBXNativeTarget "SceneKit_Digital_Timer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				749AB8B92B30774300CAB5D6 /* Debug */,
