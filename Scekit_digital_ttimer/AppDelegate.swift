@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  Scekit_digital_ttimer
-//
-//  Created by 南知志 on 2023/12/18.
-//
-
 import UIKit
 
 @main
