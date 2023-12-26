@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/satoshi/Programming/Xcodes/Scekit_digital_ttimer/SceneKit_Digital_Timer.xcodeproj">
+      location = "self:">
    </FileRef>
 </Workspace>
